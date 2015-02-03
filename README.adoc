@@ -1,5 +1,7 @@
 = governator-junit-runner
 
+image:https://travis-ci.org/bijukunjummen/governator-junit-runner.svg["Build Status", link="https://travis-ci.org/bijukunjummen/governator-junit-runner"]
+
 == Overview
 This project aims to simplify integrating https://github.com/Netflix/governator[Netflix Governator] in JUnit Tests.
 

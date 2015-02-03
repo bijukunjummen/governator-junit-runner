@@ -1,8 +1,28 @@
 = governator-junit-runner
 
+== Overview
+This project aims to simplify integrating https://github.com/Netflix/governator[Netflix Governator] in JUnit Tests.
 
-https://github.com/Netflix/governator[Netflix Governator] provides support for testing using Junit through
-the use of a Junit @Rule and a typical test has the following outline:
+
+This is how a Governator Junit test would look using this module:
+[source,java]
+----
+@RunWith(GovernatorJunit4Runner.class)
+@LifecycleInjectorParams(modules = SampleModule.class, scannedPackages = "governator.junit.demo")
+public class SampleGovernatorRunnerTest {
+
+    @Inject
+    private BlogService blogService;
+
+    @Test
+    public void testExampleBeanInjection() throws Exception {
+        assertNotNull(blogService.get(1l));
+    }
+
+}
+----
+
+This is in contrast to the more verbose code that results from using the JUnit @Rule provided by governator's test support:
 
 [source,java]
 ----
@@ -36,22 +56,15 @@ public class SampleGovernatorJunitSupportTest {
 }
 ----
 
-This project aims to simplify this using a custom Junit Runner and a similar test
-using a custom runner will have the following structure:
+== Usage
 
-[source,java]
+Add the following dependency to your pom.xml file(artifact is yet to be published to maven central :-) ):
+[source, xml]
 ----
-@RunWith(GovernatorJunit4Runner.class)
-@LifecycleInjectorParams(modules = SampleModule.class, scannedPackages = "governator.junit.demo")
-public class SampleGovernatorRunnerTest {
-
-    @Inject
-    private BlogService blogService;
-
-    @Test
-    public void testExampleBeanInjection() throws Exception {
-        assertNotNull(blogService.get(1l));
-    }
-
-}
+    <dependency>
+      <groupId>com.allandsundry</groupId>
+      <artifactId>governator-junit-runner</artifactId>
+      <version>0.2-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
 ----

@@ -4,10 +4,10 @@
 
 	<groupId>governator.test</groupId>
 	<artifactId>governator-junit-runner</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>0.2-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>governator-junit-runner</name>
-	<url>http://maven.apache.org</url>
+	<url>https://github.com/bijukunjummen/governator-junit-runner</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

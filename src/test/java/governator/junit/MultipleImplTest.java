@@ -1,6 +1,9 @@
 package governator.junit;
 
-import com.google.inject.*;
+import com.google.inject.AbstractModule;
+import com.google.inject.BindingAnnotation;
+import com.google.inject.Inject;
+import com.google.inject.Scopes;
 import governator.junit.config.LifecycleInjectorParams;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,7 +14,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 
 @RunWith(GovernatorJunit4Runner.class)
@@ -74,19 +77,14 @@ class MarketPlaceUser {
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 @BindingAnnotation
-@interface Android {
-
-}
+@interface Android {}
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 @BindingAnnotation
-@interface Ios {
+@interface Ios {}
 
-}
-
-interface MarketPlace {
-}
+interface MarketPlace {}
 
 class AppleMarketPlace implements MarketPlace {
 

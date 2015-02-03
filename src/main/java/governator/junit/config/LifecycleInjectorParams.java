@@ -20,4 +20,5 @@ public @interface LifecycleInjectorParams {
     Class<? extends BootstrapModule> bootstrapModule() default Bootstrap.NullBootstrapModule.class;
     Class<? extends BootstrapModule>[] additionalBootstrapModules() default {};
     Class<? extends Module>[] modules();
+    String[] scannedPackages() default {};
 }

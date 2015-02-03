@@ -1,0 +1,57 @@
+= governator-junit-runner
+
+
+https://github.com/Netflix/governator[Netflix Governator] provides support for testing using Junit through
+the use of a Junit @Rule and a typical test has the following outline:
+
+[source,java]
+----
+import com.google.inject.Injector;
+import com.netflix.governator.guice.LifecycleTester;
+import org.junit.Rule;
+import org.junit.Test;
+import sample.service.BlogService;
+
+import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.Matchers.*;
+
+public class SampleGovernatorJunitSupportTest {
+
+    @Rule
+    public LifecycleTester tester = new LifecycleTester();
+
+    @Test
+    public void testExampleBeanInjection() throws Exception {
+        tester.start();
+        Injector injector = tester
+                .builder()
+                .usingBasePackages("sample.gov")
+                .build()
+                .createInjector();
+
+        BlogService blogService = injector.getInstance(BlogService.class);
+        assertThat(blogService.get(1l), is(notNullValue()));
+    }
+
+}
+----
+
+This project aims to simplify this using a custom Junit Runner and a similar test
+using a custom runner will have the following structure:
+
+[source,java]
+----
+@RunWith(GovernatorJunit4Runner.class)
+@LifecycleInjectorParams(modules = SampleModule.class, scannedPackages = "governator.junit.demo")
+public class SampleGovernatorRunnerTest {
+
+    @Inject
+    private BlogService blogService;
+
+    @Test
+    public void testExampleBeanInjection() throws Exception {
+        assertNotNull(blogService.get(1l));
+    }
+
+}
+----

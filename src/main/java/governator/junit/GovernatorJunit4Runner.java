@@ -80,6 +80,8 @@ public class GovernatorJunit4Runner extends BlockJUnit4ClassRunner {
                 = lifecycleInjectorParamsAnnotation.additionalBootstrapModules();
         Class<? extends Module>[] moduleClasses = lifecycleInjectorParamsAnnotation.modules();
 
+        String[] scannedPackages = lifecycleInjectorParamsAnnotation.scannedPackages();
+
         List<Module> modules = getModuleInstances(moduleClasses);
 
         LifecycleInjectorBuilder lifecycleInjectorBuilder = LifecycleInjector.builder();
@@ -96,6 +98,10 @@ public class GovernatorJunit4Runner extends BlockJUnit4ClassRunner {
         if (additionalBootstrapModuleClasses != null) {
             List<BootstrapModule> additionalBootstrapModules = getBootstrapModuleInstances(additionalBootstrapModuleClasses);
             lifecycleInjectorBuilder.withAdditionalBootstrapModules(additionalBootstrapModules);
+        }
+
+        if (scannedPackages != null) {
+            lifecycleInjectorBuilder.usingBasePackages(scannedPackages);
         }
 
         Injector localInjector = lifecycleInjectorBuilder.build().createInjector();

@@ -12,17 +12,19 @@ import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * {@code GovernatorJunit4Runner} is an extension of JUnit's {@link org.junit.runners.BlockJUnit4ClassRunner}
  * providing an easier way to test <a href="https://github.com/Netflix/governator">Netflix Governator</a>
+ *
+ * @author Biju Kunjummen
  */
 public class GovernatorJunit4Runner extends BlockJUnit4ClassRunner {
 
     private Injector injector;
     private LifecycleManager lifecycleManager;
+    private LifecycleInjectorParamsExtractor injectorParamsExtractor;
 
     /**
      * Creates a GovernatorJunit4Runner to run {@code testClass}
@@ -32,8 +34,10 @@ public class GovernatorJunit4Runner extends BlockJUnit4ClassRunner {
      */
     public GovernatorJunit4Runner(Class<?> testClass) throws InitializationError {
         super(testClass);
+        this.injectorParamsExtractor = new LifecycleInjectorParamsExtractor();
         this.injector = createInjectorFromClassAnnotations(testClass);
         this.lifecycleManager = getLifecycleManager(this.injector);
+
     }
 
     /**
@@ -74,29 +78,24 @@ public class GovernatorJunit4Runner extends BlockJUnit4ClassRunner {
     private Injector createInjectorFromClassAnnotations(Class<?> testClass) throws InitializationError {
         LifecycleInjectorParams lifecycleInjectorParamsAnnotation
                 = testClass.getAnnotation(LifecycleInjectorParams.class);
-        Class<? extends BootstrapModule> bootstrapModuleClass
-                = lifecycleInjectorParamsAnnotation.bootstrapModule();
-        Class<? extends BootstrapModule>[] additionalBootstrapModuleClasses
-                = lifecycleInjectorParamsAnnotation.additionalBootstrapModules();
-        Class<? extends Module>[] moduleClasses = lifecycleInjectorParamsAnnotation.modules();
 
-        String[] scannedPackages = lifecycleInjectorParamsAnnotation.scannedPackages();
 
-        List<Module> modules = getModuleInstances(moduleClasses);
+        List<Module> modules = this.injectorParamsExtractor.getModules(lifecycleInjectorParamsAnnotation);
+        BootstrapModule bootstrapModule = this.injectorParamsExtractor.getBootstrapModule(lifecycleInjectorParamsAnnotation);
+        List<BootstrapModule> additionalBootstrapModules = this.injectorParamsExtractor.getAdditionalBootstrapModules(lifecycleInjectorParamsAnnotation);
+        String[] scannedPackages = this.injectorParamsExtractor.getScannedPackages(lifecycleInjectorParamsAnnotation);
 
-        LifecycleInjectorBuilder lifecycleInjectorBuilder = LifecycleInjector.builder();
+                LifecycleInjectorBuilder lifecycleInjectorBuilder = LifecycleInjector.builder();
 
         if (modules != null) {
             lifecycleInjectorBuilder.withModules(modules);
         }
 
-        if (bootstrapModuleClass != null) {
-            BootstrapModule bootstrapModule = getBoostrapModuleInstance(bootstrapModuleClass);
+        if (bootstrapModule != null) {
             lifecycleInjectorBuilder.withBootstrapModule(bootstrapModule);
         }
 
-        if (additionalBootstrapModuleClasses != null) {
-            List<BootstrapModule> additionalBootstrapModules = getBootstrapModuleInstances(additionalBootstrapModuleClasses);
+        if (additionalBootstrapModules != null) {
             lifecycleInjectorBuilder.withAdditionalBootstrapModules(additionalBootstrapModules);
         }
 
@@ -109,40 +108,9 @@ public class GovernatorJunit4Runner extends BlockJUnit4ClassRunner {
         return localInjector;
     }
 
-    private BootstrapModule getBoostrapModuleInstance(Class<? extends BootstrapModule> bootstrapModuleClass) throws InitializationError {
-        try {
-            BootstrapModule bootstrapModule = bootstrapModuleClass.newInstance();
-            return bootstrapModule;
-        } catch (Exception e) {
-            throw new InitializationError(e);
-        }
-    }
 
-    private List<BootstrapModule> getBootstrapModuleInstances(Class<? extends BootstrapModule>[] bootstrapModuleClasses) throws InitializationError {
-        List<BootstrapModule> bootstrapModules = new ArrayList<>();
-        for (int i = 0; i < bootstrapModuleClasses.length; i++) {
-            Class<? extends BootstrapModule> bootstrapModuleClass = bootstrapModuleClasses[i];
-            try {
-                bootstrapModules.add(getBoostrapModuleInstance(bootstrapModuleClass));
-            } catch(Exception e) {
-                throw new InitializationError(e);
-            }
-        }
-        return bootstrapModules;
-    }
 
-    private List<Module> getModuleInstances(Class<? extends Module>[] moduleClasses) throws InitializationError {
-        List<Module> modules = new ArrayList<>(moduleClasses.length);
-        for (int i = 0; i < moduleClasses.length; i++) {
-            Class<? extends Module> moduleClass = moduleClasses[i];
-            try {
-                modules.add(moduleClasses[i].newInstance());
-            } catch (Exception e) {
-                throw new InitializationError(e);
-            }
-        }
-        return modules;
-    }
+
 
     private LifecycleManager getLifecycleManager(Injector injector) {
         return injector.getInstance(LifecycleManager.class);

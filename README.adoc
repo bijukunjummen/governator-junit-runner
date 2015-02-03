@@ -60,11 +60,11 @@ public class SampleGovernatorJunitSupportTest {
 
 == Usage
 
-Add the following dependency to your pom.xml file(artifact is yet to be published to maven central :-) ):
+Add the following dependency to your pom.xml file(artifact is yet to be published to maven central):
 [source, xml]
 ----
     <dependency>
-      <groupId>com.allandsundry</groupId>
+      <groupId>com.github.bijukunjummen</groupId>
       <artifactId>governator-junit-runner</artifactId>
       <version>0.2-SNAPSHOT</version>
       <scope>test</scope>

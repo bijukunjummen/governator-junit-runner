@@ -36,7 +36,6 @@
 				<configuration>
 					<source>1.7</source>
 					<target>1.7</target>
-					<compilerArgument>-parameters</compilerArgument>
 				</configuration>
 			</plugin>
 		</plugins>

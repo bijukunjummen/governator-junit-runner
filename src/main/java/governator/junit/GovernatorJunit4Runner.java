@@ -29,7 +29,7 @@ public class GovernatorJunit4Runner extends BlockJUnit4ClassRunner {
     /**
      * Creates a GovernatorJunit4Runner to run {@code testClass}
      *
-     * @param testClass
+     * @param testClass the test class being executed
      * @throws org.junit.runners.model.InitializationError if the test class is malformed.
      */
     public GovernatorJunit4Runner(Class<?> testClass) throws InitializationError {
@@ -45,7 +45,7 @@ public class GovernatorJunit4Runner extends BlockJUnit4ClassRunner {
      * entire test class and closed after all the tests are complete. This may not be an ideal behavior and will
      * be revisited at a later stage.
      *
-     * @param notifier
+     * @param notifier parent notifier
      * @return the statement with modified startup and shutdown
      */
     @Override

@@ -28,15 +28,6 @@ This is in contrast to the more verbose code that results from using the JUnit @
 
 [source,java]
 ----
-import com.google.inject.Injector;
-import com.netflix.governator.guice.LifecycleTester;
-import org.junit.Rule;
-import org.junit.Test;
-import sample.service.BlogService;
-
-import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.Matchers.*;
-
 public class SampleGovernatorJunitSupportTest {
 
     @Rule
@@ -58,15 +49,17 @@ public class SampleGovernatorJunitSupportTest {
 }
 ----
 
+More Samples are in the test folder
+
 == Usage
 
-Add the following dependency to your pom.xml file(artifact is yet to be published to maven central):
+Add the following dependency to your pom.xml file:
 [source, xml]
 ----
     <dependency>
       <groupId>com.github.bijukunjummen</groupId>
       <artifactId>governator-junit-runner</artifactId>
-      <version>0.2-SNAPSHOT</version>
+      <version>0.2.RELEASE</version>
       <scope>test</scope>
     </dependency>
 ----
